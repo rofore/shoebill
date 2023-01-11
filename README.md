@@ -1,3 +1,7 @@
+< STILL EXPERIMENTAL! >
+
+This fork of Shoebill builds on Apple Silicon and allows networking using Apple's VMNet (needs to be executed as root!)
+
 <h1><img align=right src="../../../pruten.github.io/raw/master/web/stork_tiny_head3.jpg"/>Shoebill</h1>
 
 A Macintosh II emulator that runs A/UX (and A/UX only). 

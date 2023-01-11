@@ -286,24 +286,16 @@
     if (memcmp(config.pram+0xc, "NuMc", 4) != 0)
         [self zapPram:defaults ptr:config.pram];
     
-    NSString *defaultTapPath = [defaults objectForKey:@"tapPathE"];
+	netdev = [defaults objectForKey:@"tapPathE"];
     NSString *defaultMacAddr = [defaults objectForKey:@"macAddressE"];
     ethEnabled = [defaults integerForKey:@"ethernetEnabledE"];
     if (ethEnabled) {
-        if (tap_fd_valid && strcmp(tapPath, [defaultTapPath UTF8String]) != 0) {
-            close(tap_fd);
-            tap_fd_valid = 0;
-        }
-        if (tapPath)
-            free(tapPath);
-        tapPath = strdup([defaultTapPath UTF8String]);
         if (!(parseMACAddr([defaultMacAddr UTF8String], mac))) {
             [self complain:@"Bad MAC addr"];
             ethEnabled = 0;
             return NO;
         }
     }
-    
     return YES;
 }
 
@@ -401,26 +393,10 @@ void pram_callback (void *param, const uint8_t addr, const uint8_t byte)
     }
     
     if (ethEnabled) {
-        if (!tap_fd_valid) {
-            tap_fd = open(tapPath, O_RDWR | O_NOFOLLOW);
-            if (tap_fd == -1) {
-                NSAlert *theAlert = [NSAlert
-                                     alertWithMessageText:nil
-                                     defaultButton:nil
-                                     alternateButton:nil
-                                     otherButton:nil
-                                     informativeTextWithFormat:@"Couldn't open tap device (errno = %d)", errno
-                                     ];
-                [theAlert runModal];
-                return ;
-            }
-            tap_fd_valid = 1;
-        }
-        if (!shoebill_install_ethernet_card(&config, 13, mac, tap_fd)) {
+        if (!shoebill_install_ethernet_card(&config, 13, mac, [netdev UTF8String])) {
             [self complain:[NSString stringWithFormat:@"%s", config.error_msg]];
             return ;
         }
-            
     }
     
     shoebill_start();

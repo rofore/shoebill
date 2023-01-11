@@ -74,7 +74,7 @@
         [defaults setObject:[NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
                              mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]]
                      forKey:@"macAddressE"];
-        [defaults setObject:@"/dev/tap0" forKey:@"tapPathE"];
+        [defaults setObject:@"en0" forKey:@"tapPathE"];
         [defaults setInteger:0 forKey:@"ethernetEnabledE"];
         
         for (i=0; i<4; i++) {

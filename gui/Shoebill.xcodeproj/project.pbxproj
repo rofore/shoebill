@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00374F7C296F3CE7002C3CC7 /* vmnet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00374F7B296F3CE7002C3CC7 /* vmnet.framework */; };
 		870A2F9E192D2A6D00ABBC14 /* shoeScreenWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 870A2F9D192D2A6D00ABBC14 /* shoeScreenWindowController.m */; };
 		87495445189980E200E80F5B /* shoeScreenView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87495444189980E200E80F5B /* shoeScreenView.xib */; };
 		8749544718999F5300E80F5B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8749544618999F5300E80F5B /* OpenGL.framework */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		00374F7B296F3CE7002C3CC7 /* vmnet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vmnet.framework; path = System/Library/Frameworks/vmnet.framework; sourceTree = SDKROOT; };
+		009A0057296F48E600C80978 /* libdispatch.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libdispatch.tbd; path = usr/lib/system/libdispatch.tbd; sourceTree = SDKROOT; };
 		870A2F9C192D2A6D00ABBC14 /* shoeScreenWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shoeScreenWindowController.h; sourceTree = "<group>"; };
 		870A2F9D192D2A6D00ABBC14 /* shoeScreenWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = shoeScreenWindowController.m; sourceTree = "<group>"; };
 		87495444189980E200E80F5B /* shoeScreenView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = shoeScreenView.xib; sourceTree = "<group>"; };
@@ -67,6 +70,7 @@
 				87F977651898790B000D589E /* libshoebill_core.a in Frameworks */,
 				87F9772C18987700000D589E /* Cocoa.framework in Frameworks */,
 				8749544718999F5300E80F5B /* OpenGL.framework in Frameworks */,
+				00374F7C296F3CE7002C3CC7 /* vmnet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +111,8 @@
 		87F9772A18987700000D589E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				009A0057296F48E600C80978 /* libdispatch.tbd */,
+				00374F7B296F3CE7002C3CC7 /* vmnet.framework */,
 				874954481899A22D00E80F5B /* QuartzCore.framework */,
 				8749544618999F5300E80F5B /* OpenGL.framework */,
 				87F9772B18987700000D589E /* Cocoa.framework */,
@@ -394,6 +400,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../intermediates,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
@@ -419,6 +426,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../intermediates,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.shoebill.${PRODUCT_NAME:rfc1034identifier}";

@@ -49,6 +49,15 @@
 
 #if (defined __APPLE__)
 
+#define USE_VMNET 1
+
+#if (1 == USE_VMNET)
+#include "VMNet.h"
+typedef const char *NetDeviceDescriptor_t;
+#else
+typedef int NetDeviceDescriptor_t;
+#endif
+
 #include <machine/endian.h>
 #include <libkern/OSByteOrder.h>
 #ifndef ntohll
@@ -138,7 +147,7 @@ uint32_t shoebill_install_video_card(shoebill_config_t *config, uint8_t slotnum,
 uint32_t shoebill_install_tfb_card(shoebill_config_t *config, uint8_t slotnum);
 
 /* Call this after shoebill_initialize() to add an ethernet card */
-uint32_t shoebill_install_ethernet_card(shoebill_config_t *config, uint8_t slotnum, uint8_t ethernet_addr[6], int tap_fd);
+uint32_t shoebill_install_ethernet_card(shoebill_config_t *config, uint8_t slotnum, uint8_t ethernet_addr[6], NetDeviceDescriptor_t netdev);
 
 /* Get a video frame from a particular video card */
 shoebill_video_frame_info_t shoebill_get_video_frame(uint8_t slotnum, _Bool just_params);
@@ -167,8 +176,8 @@ void shoebill_mouse_move(int32_t x, int32_t y);
 void shoebill_mouse_move_delta (int32_t x, int32_t y);
 void shoebill_mouse_click(uint8_t down);
 
-void shoebill_start();
-void shoebill_stop();
+void shoebill_start(void);
+void shoebill_stop(void);
 
 void slog(const char *fmt, ...);
 
@@ -492,7 +501,7 @@ typedef struct {
 } pram_state_t;
 
 void init_via_state (uint8_t pram_data[256], shoebill_pram_callback_t callback, void *callback_param);
-void init_adb_state();
+void init_adb_state(void);
 void init_scsi_bus_state();
 void init_iwm_state();
 
@@ -669,8 +678,11 @@ typedef struct {
     uint8_t par[6]; // physical address
     uint8_t curr; // current page
     
-    
-    int tap_fd;
+    #if (1 == USE_VMNET)
+        VMNet_t vmnet;
+    #else
+        int tap_fd;
+    #endif
 } shoebill_card_ethernet_t;
 
 typedef enum {
@@ -1081,7 +1093,8 @@ shoebill_video_frame_info_t nubus_video_get_frame(shoebill_card_video_t *ctx,
                                                   _Bool just_params);
 
 // Apple EtherTalk
-void nubus_ethernet_init(void *_ctx, uint8_t slotnum, uint8_t ethernet_addr[6], int tap_fd);
+void nubus_ethernet_init(void *_ctx, uint8_t slotnum, uint8_t ethernet_addr[6],
+                         NetDeviceDescriptor_t netdev);
 uint32_t nubus_ethernet_read_func(uint32_t, uint32_t, uint8_t);
 void nubus_ethernet_write_func(uint32_t, uint32_t, uint32_t, uint8_t);
 void nubus_ethernet_destroy_func(uint8_t);
