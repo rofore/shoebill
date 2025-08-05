@@ -3,6 +3,7 @@ CC = clang
 CFLAGS = -O3 -ggdb -flto -Wno-deprecated-declarations
 # CFLAGS = -O0 -ggdb -Wno-deprecated-declarations
 
+TEMP = ../intermediates
 
 DEPS = mc68851.h shoebill.h Makefile macro.pl
 NEED_DECODER = cpu dis
@@ -32,7 +33,7 @@ OBJ_arm64 = $(patsubst %,%.arm64,$(OBJ_x86_64))
 
 MACRO = perl macro.pl
 
-TEMP = ../intermediates
+
 
 
 all: $(TEMP)/libshoebill_core.a 
