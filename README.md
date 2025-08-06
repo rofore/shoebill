@@ -1,6 +1,6 @@
 < STILL EXPERIMENTAL! >
 
-This fork of Shoebill builds on Apple Silicon and allows networking using Apple's VMNet (needs to be executed as root!)
+This fork of Shoebill builds on Apple Silicon and allows networking using Apple's VMNet (needs to be executed as root!). It also uses standard Quartz 2D to render the video output and _should_ (not tested!) work on retina and non-retina displays.
 
 <h1><img align=right src="../../../pruten.github.io/raw/master/web/stork_tiny_head3.jpg"/>Shoebill</h1>
 
