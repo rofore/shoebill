@@ -150,7 +150,7 @@
         
         // ctrl - left click doesn't get reported as rightMouseDown
         // on Mavericks (and maybe other OS X versions?)
-        if ([theEvent modifierFlags] & NSControlKeyMask) {
+        if ([theEvent modifierFlags] & NSEventModifierFlagControl) {
             shoeScreenWindow *win = (shoeScreenWindow*)[self window];
             [win uncaptureMouse];
         }
