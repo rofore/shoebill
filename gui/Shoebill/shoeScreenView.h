@@ -29,7 +29,7 @@
 #import "shoeApplication.h"
 
 
-@interface shoeScreenView : NSOpenGLView {
+@interface shoeScreenView : NSView {
     CGColorSpaceRef colorspace;
     NSTimer *timer;
     NSRecursiveLock *lock;

@@ -56,19 +56,6 @@
 
 - (void) awakeFromNib
 {
-    NSOpenGLPixelFormatAttribute attrs[] =
-    {
-        NSOpenGLPFADoubleBuffer,
-        0
-    };
-    
-    NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
-    assert(pf);
-    
-    NSOpenGLContext* context = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:nil];
-    [self setPixelFormat:pf];
-    [self setOpenGLContext:context];
-    
     colorspace = CGColorSpaceCreateDeviceRGB();
     
     timer = [NSTimer
@@ -78,9 +65,9 @@
              userInfo:nil
              repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:timer
-                                forMode:NSDefaultRunLoopMode];
+                                 forMode:NSDefaultRunLoopMode];
     [[NSRunLoop currentRunLoop] addTimer:timer
-                                forMode:NSEventTrackingRunLoopMode];
+                                 forMode:NSEventTrackingRunLoopMode];
     
     [[self window] setTitle:[NSString stringWithFormat:@"Shoebill"]];
     [[self window] makeKeyAndOrderFront:nil];
@@ -91,67 +78,36 @@
     [self setNeedsDisplay:YES];
 }
 
-- (void)prepareOpenGL
-{
-    GLint swapInt = 1;
-    [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
-}
-
-
 - (void)drawRect:(NSRect)rect
 {
     const uint8_t slotnum = ((shoeScreenWindowController*)[[self window] windowController])->slotnum;
     
-    [[self openGLContext] makeCurrentContext];
-    
-    NSRect frame = [self frame];
-    NSRect bounds = [self bounds];
-    
-    GLfloat minX = NSMinX(bounds);
-    GLfloat minY = NSMinY(bounds);
-    GLfloat maxX = NSMaxX(bounds);
-    GLfloat maxY = NSMaxY(bounds);
- 
-    if(NSIsEmptyRect([self visibleRect]))
-        glViewport(0, 0, 1, 1);
-    else
-        glViewport(0, 0,  frame.size.width ,frame.size.height);
-    
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(minX, maxX, minY, maxY, -1.0, 1.0);
-    
-    glDrawBuffer(GL_BACK);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-
     if (shoeApp->isRunning) {
         shoebill_video_frame_info_t frame = shoebill_get_video_frame(slotnum, 0);
         
-        glViewport(0, 0, frame.width, frame.height);
-        glRasterPos2i(0, frame.height);
-        glPixelStorei(GL_UNPACK_LSB_FIRST, GL_TRUE);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        CGContextRef bitmapContext = CGBitmapContextCreate(
+               (void*)frame.buf,
+               frame.width,
+               frame.height,
+               8UL /* Bits per channel */,
+               4UL * frame.width /* Bytes per row */,
+               colorspace,
+               kCGBitmapByteOrder32Big | kCGImageAlphaNoneSkipLast
+               );
         
-        glPixelZoom(1.0, -1.0);
+        CGImageRef cgImage = CGBitmapContextCreateImage(bitmapContext);
+        CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
+        CGContextSetInterpolationQuality(context, kCGInterpolationNone);
         
-        glDrawPixels(frame.width,
-                     frame.height,
-                     GL_RGBA,
-                     GL_UNSIGNED_BYTE,
-                     frame.buf);
-        
-        [[self openGLContext] flushBuffer];
+        CGContextDrawImage(
+                           context,
+                           self.frame, cgImage
+                           );
         
         shoebill_send_vbl_interrupt(slotnum);
+        
+        CGContextRelease(bitmapContext);
     }
-    else {
-        [[self openGLContext] flushBuffer];
-    }
-    
 }
 
 - (void)viewDidMoveToWindow
@@ -229,7 +185,7 @@
 
 /*
  * Ignore keyDown/Up events here.
- * shoeApplication captures and sends them down to the emulator. 
+ * shoeApplication captures and sends them down to the emulator.
  * We need to implement these methods though, because if they make it all
  * the way down to NSOpenGLView, they'll generate a beep, which is annoying.
  */

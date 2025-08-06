@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -61,6 +61,10 @@
 		AE75B30818A8210D00E66DB6 /* shoeScreenWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = shoeScreenWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		0091767C2E43A34D008AD59A /* core */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = core; path = ../core; sourceTree = SOURCE_ROOT; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		87F9772518987700000D589E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -94,6 +98,7 @@
 		87F9771F18987700000D589E = {
 			isa = PBXGroup;
 			children = (
+				0091767C2E43A34D008AD59A /* core */,
 				87F9773118987700000D589E /* Shoebill */,
 				87F9772A18987700000D589E /* Frameworks */,
 				87F9772918987700000D589E /* Products */,
