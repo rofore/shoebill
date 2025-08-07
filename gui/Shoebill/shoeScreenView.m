@@ -106,6 +106,7 @@
         
         shoebill_send_vbl_interrupt(slotnum);
         
+        CGImageRelease(cgImage);
         CGContextRelease(bitmapContext);
     }
 }
